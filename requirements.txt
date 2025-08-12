@@ -5,4 +5,4 @@ atproto
 huggingface_hub
 
 pandas==2.2.2
-BeautifulSoup==4.13.4
+bs4==4.13.4
