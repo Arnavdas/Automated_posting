@@ -1,0 +1,6 @@
+pytz
+json
+requests
+
+pandas==2.2.2
+BeautifulSoup==4.13.4
