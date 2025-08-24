@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 import numpy as np
 
-from main_functions import scrape_web_page, separate_elements
+from main_functions import scrape_web_page, separate_elements, get_size_of_dataframe
 
 logging.basicConfig(
     level=logging.DEBUG,              # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
@@ -106,7 +106,7 @@ for city in list_of_city:
   news_city_dict[city] = news_dff_all.copy()
   # Size Check :
   logging.info(f"{local_funcs_v2.get_size_of_dataframe(news_dff_all)}")
-  local_funcs_v2.get_size_of_dataframe(news_dff_all)
+  get_size_of_dataframe(news_dff_all)
   # Duplicacy Check :
   logging.info(f"Number of duplicate rows : {news_dff_all.duplicated().sum()}\n")
   print(f"Number of duplicate rows : {news_dff_all.duplicated().sum()}\n")
