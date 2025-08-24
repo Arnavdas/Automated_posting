@@ -3,6 +3,22 @@
 from bs4 import BeautifulSoup
 import requests
 
+def get_file_info(file_pth)-> None:
+  import os, time
+  print(f"File name passed : {file_pth}\n")
+  stats = os.stat(file_pth)
+
+  if os.path.exists(file_pth):
+    file_size = os.path.getsize(file_pth)
+    print(f'{file_pth} size :')
+    print(f"{file_size} Bytes")
+    print(f"{round(file_size/1024, 2)} Kbs")
+    print(f"{round(file_size/(1024*1024), 2)} Mbs")
+    print("Last modified:", time.ctime(stats.st_mtime))
+    print("Last accessed :", time.ctime(stats.st_atime))
+    print("Created :", time.ctime(stats.st_ctime))
+  else:
+    print(f"{file_pth} not found")
 
 def scrape_web_page(logger, url='https://odishatv.in/odisha/bhubaneswar'):
     # url+='/15' # For next page
