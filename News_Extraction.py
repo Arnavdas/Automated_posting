@@ -33,7 +33,7 @@ except:
 list_of_city = ['bhubaneswar', 'kendrapara', 'cuttack', 'rourkela', 'puri', 'kalahandi']
 display_detailed = False # shows detailed list of Nans or errors inside the loop below
 
-logging.info("Script started")
+logger.info("Script started")
 
 # News EXtraction loop starts :
 for city in list_of_city:
@@ -49,7 +49,7 @@ for city in list_of_city:
     else:
       cur_url = city_root_url_cur + '/' + str(ii)
 
-    logging.info(f"Visiting now : {cur_url}")
+    logger.info(f"Visiting now : {cur_url}")
     print(f"Visiting now : {cur_url}")
 
     _, obj = scrape_web_page(logger, cur_url)
@@ -76,7 +76,7 @@ for city in list_of_city:
 
       # Duplicacy Check :
       if news_dff_now.duplicated().sum() > 0:
-        logging.warning(f"\nNumber of duplicate rows : {news_dff_now.duplicated().sum()}\n")
+        logger.warning(f"\nNumber of duplicate rows : {news_dff_now.duplicated().sum()}\n")
         print(f"\nNumber of duplicate rows : {news_dff_now.duplicated().sum()}\n")
 
     # concat to Final Dataframe :
@@ -87,19 +87,17 @@ for city in list_of_city:
 
     # Reset Index :
     news_dff_all = news_dff_all.reset_index(drop=True)
-    logging.info(f"news_dff_all shape : {news_dff_all.shape}")
+    logger.info(f"news_dff_all shape : {news_dff_all.shape}")
     print('news_dff_all shape : ', news_dff_all.shape,'\n')
 
     # None/Nan Check :
     if news_dff_all.isnull().sum().sum() > 0:
-      logging.warning(f"Some Nones/Nans Detected : {news_dff_all.isnull().sum().sum()}")
+      logger.warning(f"Some Nones/Nans Detected : {news_dff_all.isnull().sum().sum()}")
       print(f"Some Nones/Nans Detected : {news_dff_all.isnull().sum().sum()}")
-      if display_detailed:
-        display(news_dff_all.isnull().sum())
 
     # Duplicacy Check :
     if news_dff_all.duplicated().sum() > 0:
-      logging.warning(f"\nNumber of duplicate rows : {news_dff_all.duplicated().sum()}")
+      logger.warning(f"\nNumber of duplicate rows : {news_dff_all.duplicated().sum()}")
       print(f"\nNumber of duplicate rows : {news_dff_all.duplicated().sum()}, \n")
 
     del news_dff_now, news_dict_now
@@ -109,7 +107,7 @@ for city in list_of_city:
   # logging.info(f"{local_funcs_v2.get_size_of_dataframe(news_dff_all)}")
   # get_size_of_dataframe(news_dff_all)
   # Duplicacy Check :
-  logging.info(f"Number of duplicate rows : {news_dff_all.duplicated().sum()}\n")
+  logger.info(f"Number of duplicate rows : {news_dff_all.duplicated().sum()}\n")
   print(f"Number of duplicate rows : {news_dff_all.duplicated().sum()}\n")
 
   del news_dff_all
