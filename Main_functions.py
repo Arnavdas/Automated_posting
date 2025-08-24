@@ -20,6 +20,25 @@ def get_file_info(file_pth)-> None:
   else:
     print(f"{file_pth} not found")
 
+def get_size_of_dataframe(dff, show_detailed=False, return_size_in_kbs=False)-> None:
+  '''
+  dff : pandas dataframe
+  '''
+  # Get size in bytes, convert to KB
+  size_in_kb = dff.memory_usage(deep=True).sum() / 1024  # Bytes to KB
+  size_in_mb = size_in_kb / (1024*1024)  # Bytes to MB
+  if return_size_in_kbs:
+    return round(size_in_kb, 2)
+
+  print(f"DataFrame size: {size_in_kb:.2f} Kbs OR {size_in_mb:.2f} Mbs \n")
+  
+  if show_detailed:
+    # Detailed column-wise memory usage in KB
+    print("column wise space distribution : \n")
+    column_sizes = dff.memory_usage(deep=True) / 1024
+    for column, size in column_sizes.items():
+        print(f"{column}: {size:.2f} Kbs")
+
 def scrape_web_page(logger, url='https://odishatv.in/odisha/bhubaneswar'):
     # url+='/15' # For next page
 
