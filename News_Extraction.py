@@ -113,3 +113,4 @@ for city in list_of_city:
   del news_dff_all
 
 save_dict(news_city_dict, f'news_city_dict.pkl')
+logger.info(f"All done")
