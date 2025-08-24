@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 import numpy as np
 
-from main_functions import scrape_web_page, separate_elements, get_size_of_dataframe
+from Main_functions import scrape_web_page, separate_elements, get_size_of_dataframe
 
 logging.basicConfig(
     level=logging.DEBUG,              # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
