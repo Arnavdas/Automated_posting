@@ -105,7 +105,7 @@ for city in list_of_city:
 
   news_city_dict[city] = news_dff_all.copy()
   # Size Check :
-  logging.info(f"{local_funcs_v2.get_size_of_dataframe(news_dff_all)}")
+  # logging.info(f"{local_funcs_v2.get_size_of_dataframe(news_dff_all)}")
   # get_size_of_dataframe(news_dff_all)
   # Duplicacy Check :
   logging.info(f"Number of duplicate rows : {news_dff_all.duplicated().sum()}\n")
