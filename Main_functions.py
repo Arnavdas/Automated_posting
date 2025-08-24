@@ -3,6 +3,16 @@
 from bs4 import BeautifulSoup
 import requests
 
+def save_dict(dictionary, filename='dict.pkl')-> None:
+    if type(filename) != str:
+        print(f"{filename} is not a string type, enter a str type")
+    if filename.endswith(".pkl"):
+        import pickle
+        with open(filename, 'wb') as file:
+            pickle.dump(dictionary, file)
+    else:
+        print(f"Cant save {filename} yet, bcz of different format")
+
 def get_file_info(file_pth)-> None:
   import os, time
   print(f"File name passed : {file_pth}\n")
