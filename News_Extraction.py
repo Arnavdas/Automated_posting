@@ -11,7 +11,7 @@ logging.basicConfig(
    handlers=[
         logging.StreamHandler(),               # console (stdout → Actions logs)
         logging.FileHandler("my_log.log")      # file (artifact later)
-    ]
+    ],
     force=True # This is done for colab env, bcz log format files are not created normally in colab
 )
 
