@@ -2,6 +2,7 @@
 import pandas as pd
 import logging
 import numpy as np
+import json
 
 from Main_functions import scrape_web_page, separate_elements, get_size_of_dataframe, save_dict
 
