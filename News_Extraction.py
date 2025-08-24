@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 import numpy as np
 
-from Main_functions import scrape_web_page, separate_elements, get_size_of_dataframe
+from Main_functions import scrape_web_page, separate_elements, get_size_of_dataframe, save_dict
 
 logging.basicConfig(
     level=logging.DEBUG,              # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
@@ -112,3 +112,5 @@ for city in list_of_city:
   print(f"Number of duplicate rows : {news_dff_all.duplicated().sum()}\n")
 
   del news_dff_all
+
+save_dict(news_city_dict, f'news_city_dict.pkl')
