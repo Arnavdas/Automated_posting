@@ -1,7 +1,7 @@
 requests
 atproto
 huggingface_hub
+bs4
 
 pandas==2.2.2
-bs4==4.13.4
 numpy==2.0.2
