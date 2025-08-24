@@ -1,5 +1,3 @@
-pytz
-json
 requests
 atproto
 huggingface_hub
