@@ -37,3 +37,9 @@ jobs:
           path: "*.log"
           if-no-files-found: ignore
 
+      - name: Upload extracted news PKL (if it exists)
+        uses: actions/upload-artifact@v4
+        with:
+          name: extracted-news
+          path: "*.pkl"
+          if-no-files-found: ignore
