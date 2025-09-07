@@ -87,6 +87,10 @@ def separate_elements(webpg_obj, logger, debug=False):
     news_items_dict, idx = {}, 0
 
     for item in webpg_obj_list:# Loop for extracting all imp elements
+
+      if debug:
+        display(item)
+
       news_items_dict[idx] = {}
 
       # Extracting news_link, pic_link & Title :
@@ -98,6 +102,7 @@ def separate_elements(webpg_obj, logger, debug=False):
         if debug:
           print(f'Exception occured while drawing the href element or the link : {str(ee)}')
 
+      # Extracting pic link :
       try:
         news_items_dict[idx]['pic_link'] = item.find('img').get('data-src')
       except Exception as ee:
@@ -106,53 +111,47 @@ def separate_elements(webpg_obj, logger, debug=False):
         if debug:
           print(f'Exception occured while drawing pic link : {str(ee)}')
 
+      # Extracting articleBody :
       try:
-        news_items_dict[idx]['Title'] = item.find('p').get_text()
+        news_items_dict[idx]['articleBody'] = item.find('p').get_text()
+      except Exception as ee:
+        news_items_dict[idx]['articleBody'] = None
+        logger.debug(f"Error occured while extracting articleBody : {ee}")
+        if debug:
+          print(f'Exception occured while drawing articleBody : {str(ee)}')
+
+      # Extracting Title :
+      try:
+        news_items_dict[idx]['Title'] = item.find('h5').get_text()
       except Exception as ee:
         news_items_dict[idx]['Title'] = None
         logger.debug(f"Error occured while extracting Title : {ee}")
         if debug:
-          print(f'Exception occured while drawing title : {str(ee)}')
+          print(f'Exception occured while drawing Title : {str(ee)}')
 
-      # Extracting from inside the news_link
-      if news_items_dict[idx]['news_link'] is not None:
-        _, obj_tmp = scrape_web_page(news_items_dict[idx]['news_link'])
+      comments = item.find_all(string=lambda text: isinstance(text, Comment))
 
-        try:
-          news_items_dict[idx]['author'] = obj_tmp.find('meta', attrs={'name': 'author'}).get("content")
-        except Exception as ee:
-          news_items_dict[idx]['author'] = None
-          logger.debug(f"Error occured while extracting author : {ee}")
-          if debug:
-            print(f'Exception occured while drawing author : {str(ee)}')
+      # Extracting datepublished :
+      news_items_dict[idx]['DatePublished'] = None
+      try:
+        for c in comments:
+          if "li" in c:
+              # print(c.strip())
+              inner_soup = BeautifulSoup(c, "html.parser")
+              date_text = inner_soup.get_text(strip=True)
+              # print(type(date_text), date_text)
+              if (('am'in date_text.lower()) or ('pm' in date_text.lower())) and ('ist' in date_text.lower()):
+                news_items_dict[idx]['DatePublished'] = date_text
+                if debug:
+                  print('drawn date text',date_text)
+                break
+      except Exception as ee:
+        news_items_dict[idx]['DatePublished'] = None
+        logger.debug(f"Error occured while extracting DatePublished : {ee}")
+        if debug:
+          print(f'Exception occured while drawing DatePublished : {str(ee)}')
 
-        try:# Extracting articleBody & datePublished :
-          tmp = obj_tmp.find('script', attrs={"type":"application/ld+json"})
-          tmp_1 = tmp.getText()
-          # print(tmp_1)
-          # print(idx, json.loads(tmp_1.replace('\n', '').replace('\r', ''))['datePublished'])
-          try: # Extract datePublished :
-            news_items_dict[idx]['datePublished'] = json.loads(tmp_1.replace('\n', '').replace('\r', ''))['datePublished']
-          except Exception as ee:
-            news_items_dict[idx]['datePublished'] = None
-            logger.debug(f"Error occured while extracting datePublished : {ee}")
-            if debug:
-              print(f'Exception occured while drawing datePublished : {str(ee)}')
-
-          try: # Extract articleBody :
-            news_items_dict[idx]['articleBody'] = json.loads(tmp_1.replace('\n', '').replace('\r', ''))['articleBody']
-          except Exception as ee:
-            news_items_dict[idx]['articleBody'] = None
-            logger.debug(f"Error occured while extracting articleBody : {ee}")
-            if debug:
-              print(f'Exception occured while drawing articleBody : {str(ee)}')
-
-        except Exception as ee: # exception block for attrs={"type":"application/ld+json"} :
-          news_items_dict[idx]['datePublished'], news_items_dict[idx]['articleBody'] = None, None
-          logger.debug(f"Error occured while extracting datePublished & articleBody : {ee}")
-          if debug:
-            print(f'Exception occured while drawing datePublished & articleBody : {str(ee)}')
-
+      # error index increment :
       idx+=1
   else:
     print("No news items found, which implies maybe there's some change in webpage elemental structure")
