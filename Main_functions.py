@@ -1,6 +1,6 @@
 
-import json
-from bs4 import BeautifulSoup
+# import json
+from bs4 import BeautifulSoup, Comment
 import requests
 
 def save_dict(dictionary, filename='dict.pkl')-> None:
