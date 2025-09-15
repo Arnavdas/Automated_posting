@@ -2,9 +2,11 @@ name: Run News Extraction and Publish
 
 on:
   # schedule:
-    # Runs every day at 9:00 UTC
-    # - cron: "0 9 * * *"
-  workflow_dispatch:  # allows manual trigger from GitHub UI
+  #   - cron: "0 9 * * *"   # every day at 9:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write   # allow pushing changes
 
 jobs:
   run-scripts:
@@ -17,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"   # adjust if needed
+          python-version: "3.10"
 
       - name: Install dependencies
         run: |
@@ -30,16 +32,30 @@ jobs:
       - name: Run Publish News
         run: python Publish_news.py
 
-      - name: Upload log files (if any exist)
-        uses: actions/upload-artifact@v4
-        with:
-          name: logs
-          path: "*.log"
-          if-no-files-found: ignore
+      # Save logs to repo
+      - name: Move logs to folder
+        run: |
+          mkdir -p generated/logs
+          mv *.log generated/logs/ || echo "No logs to move"
+      
+      # Save PKL files to repo
+      - name: Move PKL files to folder
+        run: |
+          mkdir -p generated/pkl
+          mv *.pkl generated/pkl/ || echo "No PKL files to move"
 
-      - name: Upload extracted news PKL (if it exists)
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add generated/
+          git commit -m "Add generated news files [skip ci]" || echo "No changes to commit"
+          git push
+
+      # (optional) keep artifact upload if you also want them in Actions
+      - name: Upload artifacts (logs & pkl)
         uses: actions/upload-artifact@v4
         with:
-          name: extracted-news
-          path: "*.pkl"
+          name: generated-files
+          path: generated/
           if-no-files-found: ignore
