@@ -4,7 +4,7 @@ import logging
 import numpy as np
 import json
 
-from Main_functions import scrape_web_page, separate_elements, get_size_of_dataframe, save_dict
+from Main_functions import scrape_web_page, separate_elements, get_size_of_dataframe, save_dict, get_current_time
 
 logging.basicConfig(
     level=logging.DEBUG,              # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
@@ -112,5 +112,5 @@ for city in list_of_city:
 
   del news_dff_all
 
-save_dict(news_city_dict, f'news_city_dict.pkl')
+save_dict(news_city_dict, f'{get_current_time("ymdh")}.pkl')
 logger.info(f"All done")
