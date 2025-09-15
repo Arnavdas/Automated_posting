@@ -111,14 +111,14 @@ def separate_elements(webpg_obj, logger, debug=False):
         if debug:
           print(f'Exception occured while drawing pic link : {str(ee)}')
 
-      # Extracting articleBody :
+      # Extracting Subtitle :
       try:
-        news_items_dict[idx]['articleBody'] = item.find('p').get_text()
+        news_items_dict[idx]['Subtitle'] = item.find('p').get_text()
       except Exception as ee:
-        news_items_dict[idx]['articleBody'] = None
-        logger.debug(f"Error occured while extracting articleBody : {ee}")
+        news_items_dict[idx]['Subtitle'] = None
+        logger.debug(f"Error occured while extracting Subtitle : {ee}")
         if debug:
-          print(f'Exception occured while drawing articleBody : {str(ee)}')
+          print(f'Exception occured while drawing Subtitle : {str(ee)}')
 
       # Extracting Title :
       try:
@@ -151,7 +151,46 @@ def separate_elements(webpg_obj, logger, debug=False):
         if debug:
           print(f'Exception occured while drawing DatePublished : {str(ee)}')
 
-      # error index increment :
+      # Extracting ArticleBody, Author Name & Author profile (if available) :
+      _, inner_tmp = scrape_web_page(logger, news_items_dict[idx]['news_link'])
+
+      # Extracting ArticleBody :
+      p_wo_class = [p.get_text(strip=True) for p in inner_tmp.find_all("p", class_=False)]
+      if len(p_wo_class) > 0:
+        news_items_dict[idx]['ArticleBody'] = "\n".join(p_wo_class)
+      else:
+        news_items_dict[idx]['ArticleBody'] = None
+        logger.debug(f"Error occured while extracting ArticleBody : {ee}")
+        if debug:
+          print(f'Exception occured while drawing ArticleBody : {str(ee)}')
+
+      # Extracting Author :
+      try:
+        author = inner_tmp.find('span', {'class':'otv-auth__name'}).get_text(strip=True)
+        news_items_dict[idx]['Author'] = author
+      except Exception as ee:
+        news_items_dict[idx]['Author'] = None
+        logger.debug(f"Error occured while extracting Author : {ee}")
+        if debug:
+          print(f'Exception occured while drawing Author : {str(ee)}')
+
+      # Extracting Author Webpage :
+      for ff in inner_tmp.find_all('span'):
+        # print(ff)
+        try:
+          href_txt = ff.find('a').get('href')
+          if (not(author is None)) and (author.lower() in href_txt.lower()):
+            news_items_dict[idx]['Author'] = None
+            break
+          else:
+            news_items_dict[idx]['AuthorWebpage'] = href_txt
+        except Exception as ee:
+          href_txt = None
+          logger.debug(f"Error occured while extracting Author Webpage : {ee}")
+          if debug:
+            print(f'Exception occured while drawing Author Webpage : {str(ee)}')
+
+      # index increment for next news item :
       idx+=1
   else:
     print("No news items found, which implies maybe there's some change in webpage elemental structure")
