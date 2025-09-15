@@ -49,6 +49,51 @@ def get_size_of_dataframe(dff, show_detailed=False, return_size_in_kbs=False)-> 
     for column, size in column_sizes.items():
         print(f"{column}: {size:.2f} Kbs")
 
+def get_current_time(format='ymdhms', custom_separator='-'):
+    '''
+    format can be ymdhms or ymdh or ymdhm or ymd or ym 
+    custom_separator must be not be an alpahabet or digit and should be of length 1
+    '''
+    if (not str(custom_separator).isdigit()) and (not str(custom_separator).isalpha()) and (len(str(custom_separator))==1):
+        sep = custom_separator
+    else:
+        print(f"{custom_separator} is not a valid separator so replacing it with - ")
+        sep = '-'
+
+    import time
+    now = time.localtime()
+    now_ymd = str(now.tm_year) + sep + str(now.tm_mon) + sep + str(now.tm_mday)
+    
+    if len(now_ymd) < 10:# So that it is of the format : YYYY-MM-DD
+        if len(now_ymd.split(sep)[1]) ==1:
+            final_mth = '0' + now_ymd.split(sep)[1]
+        else:
+            final_mth = now_ymd.split(sep)[1]
+        if len(now_ymd.split(sep)[2]) ==1:
+            final_day = '0' + now_ymd.split(sep)[2]
+        else:
+            final_day = now_ymd.split(sep)[2]
+        final_dt = now_ymd.split(sep)[0] + sep + final_mth + sep + final_day
+    else:
+        final_dt = now_ymd
+
+    if str(format).lower() == 'ymd':
+        return final_dt
+    elif str(format).lower() == 'ymdhms':
+        now_ymd_hms = final_dt + sep + str(now.tm_hour) + sep + str(now.tm_min) + sep + str(now.tm_sec)
+        return now_ymd_hms
+    elif str(format).lower() == 'ymdhm':
+        now_ymd_hms = final_dt + sep + str(now.tm_hour) + sep + str(now.tm_min)
+        return now_ymd_hms
+    elif str(format).lower() == 'ymdh':
+        now_ymd_hms = final_dt + sep + str(now.tm_hour)
+        return now_ymd_hms
+    elif str(format).lower() == 'ym':
+        return str(final_dt)[:7]
+    else:
+        print('Return format not recognized, so returning in seconds format')
+        return time.time()
+
 def scrape_web_page(logger, url='https://odishatv.in/odisha/bhubaneswar'):
     # url+='/15' # For next page
 
