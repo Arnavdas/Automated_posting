@@ -76,37 +76,6 @@ def scrape_web_page(logger, url='https://odishatv.in/odisha/bhubaneswar'):
       print(f"Error occurred while scraping: {e}")
       return None, None
 
-# Main Funcs :
-
-# error_dict = {'random_key' : 'testing'}
-
-def scrape_web_page(logger, url='https://odishatv.in/odisha/bhubaneswar'):
-    # url+='/15' # For next page
-
-    try:
-        # Send a request to the Wikipedia main page
-        # Adding a user agent to mimic a browser request
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
-        response = requests.get(url, headers=headers)
-
-        # Raise an exception for bad status codes
-        response.raise_for_status()
-
-        # Parse the HTML content
-        soup = BeautifulSoup(response.text, 'html.parser')
-
-        # Extract different sections from the main page
-        results = {}
-
-        return results, soup
-
-    except requests.RequestException as e:
-      logger.debug(f"Error occurred while scraping: {e}")
-      print(f"Error occurred while scraping: {e}")
-      return None, None
-
 def separate_elements(webpg_obj, logger, debug=False):
 
   webpg_obj_list = webpg_obj.find_all('div', {'class':'listing-result-news'})
