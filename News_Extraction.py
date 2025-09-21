@@ -6,12 +6,14 @@ import json
 
 from Main_functions import scrape_web_page, separate_elements, get_size_of_dataframe, save_dict, get_current_time
 
+log_file_nam = f'{get_current_time("ymdh")}.log'
+
 logging.basicConfig(
     level=logging.DEBUG,              # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
     format="%(asctime)s - %(levelname)s - %(message)s",
    handlers=[
         logging.StreamHandler(),               # console (stdout → Actions logs)
-        logging.FileHandler("my_log.log")      # file (artifact later)
+        logging.FileHandler(log_file_nam)      # file (artifact later)
     ],
     force=True # This is done for colab env, bcz log format files are not created normally in colab
 )
